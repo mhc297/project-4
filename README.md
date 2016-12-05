@@ -1,4 +1,4 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Unit #4 Project: Your Portfolio Project
+# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Unit #4 Project: Your Thesis Project
 
 ### Overview
 
@@ -11,6 +11,10 @@ Make sure you review your project proposal with your instructor so you can make 
 ---
 
 ### Technical Requirements
+
+The Real Goal:
+Your app must be self-representative.  It should be a statement about you as a person, the things your interested in, or a reflection of your interests as a developer.
+
 
 Your app must:
 
