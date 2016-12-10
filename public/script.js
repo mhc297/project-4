@@ -1,8 +1,8 @@
 console.log("script.js is linked");
 
-var width = 960,
-    height = 500,
-    centered;
+var width = 960;
+var height = 500;
+var centered;
 
 var projection = d3.geo.albersUsa()
     .scale(1070)
@@ -23,20 +23,34 @@ svg.append("rect")
 
 
 d3.json("usa.json", function(error, map) {
-  if (error) throw error;
+  if ((error) => console.log(error));
   console.log("Map Data is ", map);
 
-  let g = svg.append("g");
+  let groupedElements = svg.append("g");
+  // this is a geometry collection that holds an array of arc and line coordinates for each US state
+  let stateDrawData = map.objects.states;
+  let topoData = topojson.feature(map, stateDrawData).features
+  console.log("stateDrawData is ", stateDrawData)
 
-  g.append("g")
+  groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
-    .data(topojson.feature(map, map.objects.states).features)
-    .enter().append("path")
-      .attr("d", path);
+    // passes the state geometry dataset into the groupedElements array
+    .data(topoData)
+      // binds the above stateDraw coordinates to the groupedElements array so they can be drawn on the page.
+      .enter()
+      // appends a path (ie, draws the coordinates) from the stateDrawData dataset to the page
+      .append("path")
+      .attr("d", path)
+      console.log("topojson is ", topojson);
 
-  g.append("path")
-      .datum(topojson.mesh(map, map.objects.states, function(a, b) { return a !== b; }))
-      .attr("id", "state-borders")
-      .attr("d", path);
+  groupedElements.append("path")
+    .datum(topojson.mesh(map, map.objects.states, function(a, b) { return a !== b; }))
+    .attr("id", "state-borders")
+    .attr("d", path);
+    console.log("map.objects.states is ", map.objects.states);
 });
+
+// function selectState(usState){
+
+// }
