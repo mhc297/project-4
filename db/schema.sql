@@ -1,0 +1,24 @@
+BEGIN;
+
+DROP TABLE IF EXISTS senators;
+DROP TABLE IF EXISTS donors;
+
+CREATE TABLE senators (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  state VARCHAR(255) NOT NULL,
+  party VARCHAR(255) NOT NULL,
+  api_id VARCHAR(255) NOT NULL,
+  year_elected INTEGER NOT NULL
+);
+
+CREATE TABLE donors (
+  id SERIAL PRIMARY KEY NOT NULL,
+  sen_id VARCHAR(255),
+  org_name VARCHAR(255) NOT NULL,
+  dollar_total VARCHAR(255) NOT NULL,
+  dollar_pac VARCHAR(255) NOT NULL,
+  dollar_individual VARCHAR(255) NOT NULL
+);
+
+COMMIT;
