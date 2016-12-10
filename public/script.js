@@ -24,33 +24,59 @@ svg.append("rect")
 
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
-  console.log("Map Data is ", map);
+  // console.log("Map Data is ", map);
 
   let groupedElements = svg.append("g");
   // this is a geometry collection that holds an array of arc and line coordinates for each US state
   let stateDrawData = map.objects.states;
-  let topoData = topojson.feature(map, stateDrawData).features
-  console.log("stateDrawData is ", stateDrawData)
+  let topoData = topojson.feature(map, stateDrawData).features;
 
   groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
     // passes the state geometry dataset into the groupedElements array
     .data(topoData)
-      // binds the above stateDraw coordinates to the groupedElements array so they can be drawn on the page.
+      // binds the above topoData coordinates to the groupedElements array so each coordinate can be drawn on the page.
       .enter()
       // appends a path (ie, draws the coordinates) from the stateDrawData dataset to the page
       .append("path")
       .attr("d", path)
-      console.log("topojson is ", topojson);
+      .on("click", selectState);
 
   groupedElements.append("path")
-    .datum(topojson.mesh(map, map.objects.states, function(a, b) { return a !== b; }))
+    //
+    .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
     .attr("id", "state-borders")
     .attr("d", path);
-    console.log("map.objects.states is ", map.objects.states);
+
 });
 
-// function selectState(usState){
+function selectState(usState){
+  console.log("Clicked State ID is ", usState.id)
+  fetch(`/db/donors/${usState.id}`)
+  .then((r) => r.json())
+  .then((data) => {
+    console.log("data is ", data)
 
-// }
+    containerDiv = document.createElement('div');
+
+    data.forEach(function(donation){
+      senatorLi = document.createElement('h5');
+      senatorLi.innerText = `Senator: ${donation.name}`;
+      containerDiv.append(senatorLi);
+
+      organizationLi = document.createElement('h5');
+      organizationLi.innerText = `Donor: ${donation.org_name}`;
+      containerDiv.append(organizationLi);
+
+      amountLi = document.createElement('h5');
+      amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+      containerDiv.append(amountLi);
+
+    });
+
+    document.body.append(containerDiv);
+
+  })
+  .catch(error => console.log(error))
+}

@@ -3,6 +3,8 @@ const logger = require('morgan');
 const path = require('path');
 
 const apiRouter = require('./routes/api');
+const dbRouter = require('./routes/db');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -13,5 +15,6 @@ app.get('/', function(req, res){
 });
 
 app.use('/api', apiRouter);
+app.use('/db', dbRouter);
 
 app.listen(port, console.log("Listening on ", port));

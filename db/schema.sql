@@ -9,6 +9,7 @@ CREATE TABLE senators (
   state VARCHAR(255) NOT NULL,
   party VARCHAR(255) NOT NULL,
   api_id VARCHAR(255) NOT NULL,
+  geojson_id INTEGER NOT NULL,
   year_elected INTEGER NOT NULL
 );
 
