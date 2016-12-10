@@ -52,28 +52,52 @@ d3.json("usa.json", function(error, map) {
 });
 
 function selectState(usState){
-  console.log("Clicked State ID is ", usState.id)
   fetch(`/db/donors/${usState.id}`)
   .then((r) => r.json())
   .then((data) => {
-    console.log("data is ", data)
-
     containerDiv = document.createElement('div');
 
+    senatorOneName = data[1].name;
+    senatorOneTitle = document.createElement('h4');
+    senatorOneTitle.innerText = `Senator: ${senatorOneName}`;
+
+    senatorTwoName = data[data.length - 1].name;
+    senatorTwoTitle = document.createElement('h4');
+    senatorTwoTitle.innerText = `Senator: ${senatorTwoName}`;
+
+    senatorOneDiv = document.createElement('div');
+    senatorOneDiv.append(senatorOneTitle);
+    senatorOneDiv = document.createElement('div');
+    senatorOneDiv.append(senatorOneTitle);
+
+    senatorTwoDiv = document.createElement('div');
+    senatorTwoDiv.append(senatorTwoTitle);
+    senatorTwoDiv = document.createElement('div');
+    senatorTwoDiv.append(senatorTwoTitle);
+
     data.forEach(function(donation){
-      senatorLi = document.createElement('h5');
-      senatorLi.innerText = `Senator: ${donation.name}`;
-      containerDiv.append(senatorLi);
+      if (donation.name == senatorOneName) {
 
       organizationLi = document.createElement('h5');
       organizationLi.innerText = `Donor: ${donation.org_name}`;
-      containerDiv.append(organizationLi);
+      senatorOneDiv.append(organizationLi);
 
       amountLi = document.createElement('h5');
       amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
-      containerDiv.append(amountLi);
+      senatorOneDiv.append(amountLi);
+    } else {
+      organizationLi = document.createElement('h5');
+      organizationLi.innerText = `Donor: ${donation.org_name}`;
+      senatorTwoDiv.append(organizationLi);
 
+      amountLi = document.createElement('h5');
+      amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+      senatorTwoDiv.append(amountLi);
+    }
     });
+
+    containerDiv.append(senatorOneDiv);
+    containerDiv.append(senatorTwoDiv);
 
     document.body.append(containerDiv);
 
