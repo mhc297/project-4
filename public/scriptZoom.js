@@ -63,7 +63,6 @@ function clicked(stateSelected) {
 
   g.selectAll("path")
       .classed("active", centered && function(stateSelected) { return stateSelected === centered; });
-      console.log("stateSelected is ", stateSelected.id)
 
   g.transition()
       .duration(750)

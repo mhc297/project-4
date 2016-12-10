@@ -44,4 +44,21 @@ module.exports = {
     })
     .catch(error => next(error));
   },
+
+  getSenatorsByDonor(req, res, next) {
+    let donorName = req.params.donorName;
+    let donorNameString = `${donorName}`
+    db.any(`
+      SELECT senators.name, donors.org_name, senators.state, senators.geojson_id, donors.dollar_total
+      FROM senators
+      LEFT JOIN donors ON senators.api_id = donors.sen_id
+      WHERE donors.org_name = $1
+      ORDER BY donors.dollar_total ASC;
+      `, [donorNameString])
+    .then((donorData) => {
+      res.rows = donorData;
+      next();
+    })
+    .catch(error => next(error));
+  }
 }

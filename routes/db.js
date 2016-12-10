@@ -4,10 +4,14 @@ const dbDonors = require('../models/donors.js');
 
 dbRouter.get('/donors/:stateID', dbDonors.getDonorsByState, (req, res, next) =>{
   res.json(res.rows);
-})
+});
 
-dbRouter.get('/donors/:stateID/:senatorID', dbDonors.getDonorsByStateAndSenator, (req, res, next) =>{
+dbRouter.get('/donors/byDonor/:donorName', dbDonors.getSenatorsByDonor, (req, res, next) => {
   res.json(res.rows);
-})
+});
+
+// dbRouter.get('/donors/:stateID/:senatorID', dbDonors.getDonorsByStateAndSenator, (req, res, next) =>{
+//   res.json(res.rows);
+// });
 
 module.exports = dbRouter;
