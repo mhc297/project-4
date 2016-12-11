@@ -165,6 +165,7 @@ path:hover {
   display: none;
   background-color: #F4F3F2;
   opacity: 0.9;
+  z-index: 0.5;
   border: 1px solid black;
   position: fixed;
   top: 25%;
