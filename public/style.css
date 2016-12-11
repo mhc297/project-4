@@ -15,17 +15,18 @@ svg {
   border: 1px solid black;
   box-shadow: 10px 10px 5px #888888;
 }
-table {
+
+#donor-table {
   width: 30%;
+  display: none;
 }
 
-table, th, td {
+#donor-table th, td {
+  width: 30%;
+  text-align: center;
     border: 1px solid black;
 }
 
-table td {
-  text-align: center;
-}
 .containerDiv{
   display: flex;
   align-items: space-between;

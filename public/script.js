@@ -15,7 +15,7 @@ let projection = d3.geo.albersUsa()
 let path = d3.geo.path()
     .projection(projection);
 
-let svg = d3.select("body").append("svg")
+let svg = d3.select("#map-container").append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("id", "map")
@@ -64,6 +64,8 @@ function selectState(usState){
     console.log(data)
     // vanilla JS DOM manipulation to create the modal that will display the data
     containerDiv = document.createElement('div');
+    masterContainer = document.getElementById('donation-container');
+    masterContainer.innerHTML = '';
     containerDiv.className = "containerDiv";
     containerDiv.innerHTML = "";
 
@@ -142,9 +144,9 @@ function selectState(usState){
 
     containerDiv.append(senatorOneDiv);
     containerDiv.append(senatorTwoDiv);
-    document.body.append(containerDiv);
+    masterContainer.append(containerDiv);
 
-  })
+  });
   .catch(error => console.log(error))
 }
 
@@ -665,7 +667,10 @@ for(let i = 0; i < donors.length; i++) {
 }
 
 function createTable(){
+  // donorTableContainer = document.getElementById('donor-table-container');
+  // donorTableContainer.style.display = 'block';
   donorTable = document.getElementById('donor-table');
+
   tableHeadSen = document.createElement('TH');
   tableHeadSen.innerText = 'Senator';
   tableHeadSen.append(donorTable);
@@ -717,10 +722,13 @@ function handleDonorRequest(){
       newRow.append(newTotal);
 
       donorTable.append(newRow);
+      donorTable.style.display = 'block';
+
 
       let heatMapItem = result.geojson_id
       heatMapped.push(heatMapItem)
     })
+
       console.log("heatMapped array is now ", heatMapped);
   })
   .catch(error => console.log(error));
