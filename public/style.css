@@ -30,6 +30,16 @@ header {
   border-top: 1px solid #444444;
   border-right: 1px solid #444444;
   border-bottom: 1px solid #444444;
+  /*animation: slideIn 2s;*/
+}
+
+@keyframes slideIn {
+  from {
+    margin-left: -600px;
+    }
+  to {
+    margin-left: 0px;
+  }
 }
 
 #donation-container button {
@@ -60,14 +70,14 @@ svg {
 }
 
 #donor-table {
-  width: 30%;
+  width: 100%;
   display: none;
   margin: 0 auto;
   /*box-shadow: 10px 10px 5px #888888;*/
 }
 
 #donor-table th, td {
-  width: 30%;
+  width: 200px;
   text-align: center;
   border: 1px solid #444444;
 }
@@ -78,6 +88,7 @@ svg {
   flex-direction: row;
   border-top: 1px solid #444444;
   text-align: center;
+  /*animation: slideIn 2s;*/
 }
 
 .senatorDiv {
@@ -157,9 +168,23 @@ path:hover {
   border: 1px solid black;
   position: fixed;
   top: 25%;
-  width: 50%;
+  width: 600px;
   box-shadow: 8px 8px 4px #888888;
   text-align: center;
   overflow-y: scroll;
   max-height: 500px;
+  animation: modalFadeIn .5s;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    }
+  to {
+    opacity: 0.9;
+  }
+}
+
+#donor-modal h3 {
+  margin-bottom: 15000px;
 }

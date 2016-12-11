@@ -66,6 +66,8 @@ function selectState(usState){
     console.log("donor data is ", data);
     // vanilla JS DOM manipulation to create the modal that will display the data
     containerDiv = document.createElement('div');
+    containerDiv.className = "containerDiv";
+    containerDiv.innerHTML = "";
     headlineContainer = document.createElement('div');
     headlineContainer.className = 'headline-container';
     masterContainer = document.getElementById('donation-container');
@@ -73,8 +75,7 @@ function selectState(usState){
     stateName = document.createElement('h3')
     stateName.innerText = `${data[0].state}`;
     headlineContainer.append(stateName);
-    containerDiv.className = "containerDiv";
-    containerDiv.innerHTML = "";
+
 
     clearButton = document.createElement('button');
     clearButton.className = 'clearMasterButton'
@@ -730,11 +731,12 @@ function handleDonorRequest(){
   fetch(`/db/donors/byDonor/${dropValue}`)
   .then((r) => r.json())
   .then((data) => {
-    console.log(data)
+
     heatMapped = [];
     donorTable = document.getElementById('donor-table');
     modal = document.getElementById('donor-modal');
     modalTitle = document.getElementById('modal-title');
+    modalTitle.innerHTML = `${data[0].org_name}`
     donorTable.innerHTML = '';
 
     tableHeadSen = document.createElement('TH');
