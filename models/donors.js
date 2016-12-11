@@ -52,7 +52,7 @@ module.exports = {
       SELECT senators.name, donors.org_name, senators.state, senators.geojson_id, donors.dollar_total
       FROM senators
       LEFT JOIN donors ON senators.api_id = donors.sen_id
-      WHERE donors.org_name = $1
+      WHERE donors.org_name LIKE $1
       ORDER BY donors.dollar_total ASC;
       `, [donorNameString])
     .then((donorData) => {

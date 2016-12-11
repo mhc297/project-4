@@ -713,7 +713,7 @@ function handleDonorRequest(){
       newRow.append(newState);
 
       newTotal = document.createElement('TD');
-      newTotal.innerText = `${result.dollar_total}`
+      newTotal.innerText = `$${result.dollar_total}`
       newRow.append(newTotal);
 
       donorTable.append(newRow);

@@ -3,7 +3,14 @@ body {
   flex-direction: column;
   align-items: center;
   background-color: #F4F3F2;
+  /*color: rgb(94, 94, 94);*/
 }
+
+header {
+  width: 100%;
+  text-align: center;
+}
+
 svg {
   border: 1px solid black;
   box-shadow: 10px 10px 5px #888888;
@@ -43,9 +50,6 @@ table td {
 .donor-container {
   display: flex;
   flex-direction: row;
-}
-header {
-  text-align: center;
 }
 
 footer {
