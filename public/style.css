@@ -2,48 +2,105 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Playfair Display', serif;
   background-color: #F4F3F2;
+  margin: 0px;
   /*color: rgb(94, 94, 94);*/
+}
+
+p {
+  font-size: 9px;
+  margin-bottom: 0px;
+}
+
+#org-container p {
+  display: inline;
 }
 
 header {
   width: 100%;
   text-align: center;
+  background-color: #444444;
+  color: #e8e6e3;
+}
+
+#donation-container {
+  max-height: 500px;
+  overflow-y: scroll;
+  border-top: 1px solid #444444;
+  border-right: 1px solid #444444;
+  border-bottom: 1px solid #444444;
+}
+
+#donation-container button {
+  height: 25px;
+  align-self: center;
+  margin-left: 10px;
+}
+
+button:hover {
+  fill-opacity: 0.7;
+  cursor: pointer;
 }
 
 svg {
-  border: 1px solid black;
-  box-shadow: 10px 10px 5px #888888;
+  border: 1px solid #444444;
+  align-self: flex-start;
+}
+
+.clearMasterButton {
+  right: 0px;
+}
+
+#content-container {
+  display: flex;
+  flex-direction: row;
+  align-items: space-around;
+  overflow: hidden;
+  width: 95%;
 }
 
 #donor-table {
   width: 30%;
   display: none;
+  /*box-shadow: 10px 10px 5px #888888;*/
 }
 
 #donor-table th, td {
   width: 30%;
   text-align: center;
-    border: 1px solid black;
+  border: 1px solid #444444;
 }
 
 .containerDiv{
   display: flex;
   align-items: space-between;
   flex-direction: row;
-  border: 1px solid black;
+  border-top: 1px solid #444444;
   text-align: center;
 }
 
 .senatorDiv {
   margin: 5px;
-  border: 1px solid black;
   text-align: center;
+  width: 200px;
+}
+
+h3 {
+  display: inline;
+}
+
+.headline-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+
 }
 
 .donationDiv {
-  margin-bottom: 40px;
-  border: 1px solid black;
+  margin-bottom: 10px;
+  border-top: 1px solid #444444;
+  border-bottom: 1px solid #444444;
   padding: 2px;
   text-align: center;
 }
@@ -77,12 +134,20 @@ footer {
 #state-borders {
   fill: none;
   stroke: #fff;
-  stroke-width: 1.5px;
+  stroke-width: 1px;
   stroke-linejoin: round;
   stroke-linecap: round;
   pointer-events: none;
 }
 
+path #state-borders:hover {
+  stroke-width: 10px;
+}
+
 path:hover {
   fill-opacity: .7;
+  fill: #e60000;
+  cursor: pointer;
+
+
 }

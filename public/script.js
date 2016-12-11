@@ -61,23 +61,50 @@ function selectState(usState){
   .then((r) => r.json())
   // the response is going to an array of 20 items per state clicked (2 senators * 10 donors)
   .then((data) => {
-    console.log(data)
+    console.log("donor data is ", data);
     // vanilla JS DOM manipulation to create the modal that will display the data
     containerDiv = document.createElement('div');
+    headlineContainer = document.createElement('div');
+    headlineContainer.className = 'headline-container';
     masterContainer = document.getElementById('donation-container');
     masterContainer.innerHTML = '';
+    stateName = document.createElement('h3')
+    stateName.innerText = `${data[0].state}`;
+    headlineContainer.append(stateName);
     containerDiv.className = "containerDiv";
     containerDiv.innerHTML = "";
 
+    clearButton = document.createElement('button');
+    clearButton.className = 'clearMasterButton'
+    clearButton.innerText = 'Clear';
+    clearButton.addEventListener('click', clearMasterContainer);
+    headlineContainer.append(clearButton);
+    masterContainer.append(headlineContainer);
+
     // grabs the first senators name (the data is returned ordered by senator)
     senatorOneName = data[1].name;
-    senatorOneTitle = document.createElement('h4');
-    senatorOneTitle.innerText = `Senator: ${senatorOneName}`;
+    senatorOneParty = data[1].party;
+    senatorOneTitle = document.createElement('h5');
+    senatorOneTitle.innerText = `${senatorOneName}`;
+
+    console.log("Party: ", senatorOneParty)
+    if (senatorOneParty === 'Democrat'){
+      senatorOneTitle.style.color = '#232066';
+    } if (senatorOneParty === 'Republican'){
+      senatorOneTitle.style.color = '#E91D0E';
+    }
 
     // grabs the senators name
     senatorTwoName = data[data.length - 1].name;
-    senatorTwoTitle = document.createElement('h4');
-    senatorTwoTitle.innerText = `Senator: ${senatorTwoName}`;
+    senatorTwoParty = data[data.length - 1].party;
+    senatorTwoTitle = document.createElement('h5');
+    senatorTwoTitle.innerText = `${senatorTwoName}`;
+
+    if (senatorTwoParty === 'Democrat'){
+      senatorTwoTitle.style.color = '#232066';
+    } if (senatorTwoParty === 'Republican'){
+      senatorTwoTitle.style.color = '#E91D0E';
+    }
 
     senatorOneDiv = document.createElement('div');
     senatorOneDiv.append(senatorOneTitle);
@@ -100,7 +127,8 @@ function selectState(usState){
         eachDonationDivSenOne.className = "donationDiv";
 
         organizationLi = document.createElement('p');
-        organizationLi.innerText = `Donor: ${donation.org_name}`;
+        organizationLi.innerText = `${donation.org_name}`;
+        organizationLi.style.fontWeight = 'bold';
         eachDonationDivSenOne.append(organizationLi);
 
         amountLi = document.createElement('p');
@@ -123,7 +151,8 @@ function selectState(usState){
         eachDonationDivSenTwo.className = "donationDiv";
 
         organizationLi = document.createElement('p');
-        organizationLi.innerText = `Donor: ${donation.org_name}`;
+        organizationLi.innerText = `${donation.org_name}`;
+        organizationLi.style.fontWeight = 'bold';
         eachDonationDivSenTwo.append(organizationLi);
 
         amountLi = document.createElement('p');
@@ -146,7 +175,12 @@ function selectState(usState){
     containerDiv.append(senatorTwoDiv);
     masterContainer.append(containerDiv);
 
-  });
+
+    function clearMasterContainer(){
+      masterContainer.innerText = '';
+    }
+
+  })
   .catch(error => console.log(error))
 }
 
