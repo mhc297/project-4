@@ -2,7 +2,6 @@ console.log("script.js is linked");
 
 let heatMapped = [1, 2, 3, 4];
 heatMapped.className = 'heatMapped';
-console.log('heatMapped array contains ', heatMapped);
 
 let width = 960;
 let height = 500;
@@ -53,7 +52,6 @@ d3.json("usa.json", function(error, map) {
     .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
     .attr("id", "state-borders")
     .attr("d", path);
-
 });
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
@@ -106,11 +104,11 @@ function selectState(usState){
     senatorTwoTitle = document.createElement('h5');
     senatorTwoTitle.innerText = `${senatorTwoName}`;
 
-    if (senatorTwoParty === 'Democrat'){
+    if (senatorTwoParty == 'Democrat'){
       senatorTwoTitle.style.color = '#232066';
-    } if (senatorTwoParty === 'Republican'){
+    } if (senatorTwoParty ==='Republican'){
       senatorTwoTitle.style.color = '#E91D0E';
-    } if (senatorTwoParty === 'Independent') {
+    } if (senatorTwoParty == 'Independent') {
       senatorTwoTitle.style.color = '#0F7F12';
     }
 
