@@ -17,4 +17,4 @@ app.get('/', function(req, res){
 app.use('/api', apiRouter);
 app.use('/db', dbRouter);
 
-app.listen(port, console.log("Listening on ", port));
+app.listen(port, console.log("Server listening on ", port));

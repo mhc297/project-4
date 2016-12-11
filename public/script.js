@@ -38,6 +38,7 @@ d3.json("usa.json", function(error, map) {
   groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
+
     // passes the state geometry dataset into the groupedElements array
     .data(topoData)
       // binds the above topoData coordinates to the groupedElements array so each coordinate can be drawn on the page.
@@ -46,6 +47,7 @@ d3.json("usa.json", function(error, map) {
       .append("path")
       .attr("d", path)
       .on("click", selectState);
+      console.log("path.state: ", path)
 
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
@@ -79,6 +81,7 @@ function selectState(usState){
     clearButton.innerText = 'Clear';
     clearButton.addEventListener('click', clearMasterContainer);
     headlineContainer.append(clearButton);
+
     masterContainer.append(headlineContainer);
 
     // grabs the first senators name (the data is returned ordered by senator)
@@ -88,10 +91,12 @@ function selectState(usState){
     senatorOneTitle.innerText = `${senatorOneName}`;
 
     console.log("Party: ", senatorOneParty)
-    if (senatorOneParty === 'Democrat'){
+    if (senatorOneParty == 'Democrat'){
       senatorOneTitle.style.color = '#232066';
-    } if (senatorOneParty === 'Republican'){
+    } if (senatorOneParty == 'Republican'){
       senatorOneTitle.style.color = '#E91D0E';
+    } if (senatorOneParty == 'Independent') {
+      senatorOneTitle.style.color = '#0F7F12';
     }
 
     // grabs the senators name
@@ -104,6 +109,8 @@ function selectState(usState){
       senatorTwoTitle.style.color = '#232066';
     } if (senatorTwoParty === 'Republican'){
       senatorTwoTitle.style.color = '#E91D0E';
+    } if (senatorTwoParty === 'Independent') {
+      senatorTwoTitle.style.color = '#0F7F12';
     }
 
     senatorOneDiv = document.createElement('div');
@@ -692,7 +699,6 @@ var donors = [
 ]
 
 let select = document.getElementById('donor-dropdown');
-
 for(let i = 0; i < donors.length; i++) {
     let option = document.createElement('option');
     option.innerHTML = donors[i];
@@ -727,6 +733,9 @@ function handleDonorRequest(){
     console.log(data)
     heatMapped = [];
     donorTable = document.getElementById('donor-table');
+    modal = document.getElementById('donor-modal');
+    modalTitle = document.getElementById('modal-title');
+    donorTable.innerHTML = '';
 
     tableHeadSen = document.createElement('TH');
     tableHeadSen.innerText = 'Senator';
@@ -756,8 +765,12 @@ function handleDonorRequest(){
       newRow.append(newTotal);
 
       donorTable.append(newRow);
+      modal.style.display = 'block';
       donorTable.style.display = 'block';
 
+      modal.addEventListener('click', function (){
+        modal.style.display = 'none';
+      });
 
       let heatMapItem = result.geojson_id
       heatMapped.push(heatMapItem)
