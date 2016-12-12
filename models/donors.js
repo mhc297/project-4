@@ -49,7 +49,7 @@ module.exports = {
     let donorName = req.params.donorName;
     let donorNameString = `${donorName}`
     db.any(`
-      SELECT senators.name, donors.org_name, senators.state, senators.geojson_id, donors.dollar_total
+      SELECT senators.name, donors.org_name, senators.state, senators.party, senators.geojson_id, donors.dollar_total
       FROM senators
       LEFT JOIN donors ON senators.api_id = donors.sen_id
       WHERE donors.org_name LIKE $1

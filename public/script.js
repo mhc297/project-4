@@ -751,7 +751,9 @@ function handleDonorRequest(){
 
     donorTable = document.getElementById('donor-table');
      data.forEach(function(result){
+      // console.log("result is ", result);
       newRow = document.createElement('TR');
+      newRow.className = 'tableRow'
       newSen = document.createElement('TD');
       newSen.innerText = `${result.name}`
       newRow.append(newSen)
@@ -762,9 +764,20 @@ function handleDonorRequest(){
 
       newTotal = document.createElement('TD');
       newTotal.innerText = `$${result.dollar_total}`
+
       newRow.append(newTotal);
+      if (result.party == 'Republican') {
+        newRow.style.backgroundColor = '#E91D0E';
+      } if (result.party == 'Democrat') {
+        newRow.style.backgroundColor = '#232066';
+      } if (result.party == 'Independent') {
+        newRow.style.backgroundColor = '#0F7F12';
+      };
+
+      // newRow.style.backgroundColor = 'black';
 
       donorTable.append(newRow);
+
       modal.style.display = 'block';
       donorTable.style.display = 'block';
 
