@@ -25,6 +25,10 @@ header {
   color: #e8e6e3;
 }
 
+footer p {
+  font-size: 12px;
+}
+
 #donation-container {
   min-width: 405px;
   max-height: 500px;
@@ -32,7 +36,6 @@ header {
   border-top: 1px solid #444444;
   border-right: 1px solid #444444;
   border-bottom: 1px solid #444444;
-  /*animation: slideIn 2s;*/
 }
 
 @keyframes slideIn {

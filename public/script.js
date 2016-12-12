@@ -66,23 +66,58 @@ d3.json("usa.json", function(error, map) {
 
 function getLargestDonations(){
   fetch('db/donors/largest')
-  .then((r) => r.json());
+  .then((r) => r.json())
   .then((response) => {
-    console.log(response);
+
+    donationContainer = document.getElementById('donation-container');
+    donationContainer.innerText = '';
+    donationContainerHeadline = document.createElement('h3');
+    donationContainerHeadline.innerText = 'Largest Donations (Nationally)';
+    donationContainer.append(donationContainerHeadline);
+
+    response.forEach(function(donation){
+      console.log(donation);
+
+      donationTable = document.createElement('Table');
+      donationTable.className = 'donation-table'
+
+      donationRow = document.createElement('TR')
+
+      donationTableDonor = document.createElement('TD');
+      donationTableDonor.innerText = `${donation.org_name}`;
+      donationRow.append(donationTableDonor);
+
+      donationTableSenator = document.createElement('TD');
+      donationTableSenator.innerText = `${donation.name}`;
+      donationRow.append(donationTableSenator);
+
+      donationTableState = document.createElement('TD');
+      donationTableState.innerText = `${donation.state}`;
+      donationRow.append(donationTableState);
+
+      donationTableTotal = document.createElement('TD');
+      donationTableTotal.innerText = `$${donation.dollar_total}`
+      donationRow.append(donationTableTotal);
+
+      donationTable.append(donationRow);
+
+      donationContainer.append(donationTable);
+    })
   })
-  .catch(error => console.log(response))
-}
+  .catch(error => console.log(error))
+};
+
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
 // default centroid values
-  var x = null;
-  var y = null;
-  var stroke = null;
+  let x = null;
+  let y = null;
+  let stroke;
 
   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
   if (usState && centered !== usState) {
-    var centroid = path.centroid(usState);
+    let centroid = path.centroid(usState);
     // console.log("usState is ", usState);
     console.log("centroid is ", centroid);
     x = centroid[0];
@@ -125,7 +160,7 @@ function selectState(usState){
     clearButton = document.createElement('button');
     clearButton.className = 'clearMasterButton'
     clearButton.innerText = 'Clear';
-    clearButton.addEventListener('click', clearMasterContainer);
+    clearButton.addEventListener('click', getLargestDonations);
     headlineContainer.append(clearButton);
 
     masterContainer.append(headlineContainer);
