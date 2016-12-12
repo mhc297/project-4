@@ -60,5 +60,18 @@ module.exports = {
       next();
     })
     .catch(error => next(error));
+  },
+
+  getDistinctDonors(req, res, next) {
+    db.many(`
+      SELECT DISTINCT org_name
+      FROM donors
+      ORDER BY org_name ASC;
+      `)
+    .then((donors) => {
+      res.rows = donors;
+      next();
+    })
+    .catch(error => next(error));
   }
 }

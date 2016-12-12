@@ -2,6 +2,10 @@
 const dbRouter = require('express').Router();
 const dbDonors = require('../models/donors.js');
 
+dbRouter.get('/donors/donorList', dbDonors.getDistinctDonors, (req, res, next) => {
+  res.json(res.rows);
+} )
+
 dbRouter.get('/donors/:stateID', dbDonors.getDonorsByState, (req, res, next) =>{
   res.json(res.rows);
 });
