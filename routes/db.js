@@ -14,8 +14,4 @@ dbRouter.get('/donors/byDonor/:donorName', dbDonors.getSenatorsByDonor, (req, re
   res.json(res.rows);
 });
 
-// dbRouter.get('/donors/:stateID/:senatorID', dbDonors.getDonorsByStateAndSenator, (req, res, next) =>{
-//   res.json(res.rows);
-// });
-
 module.exports = dbRouter;

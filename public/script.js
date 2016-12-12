@@ -49,7 +49,6 @@ d3.json("usa.json", function(error, map) {
       .append("path")
       .attr("d", path)
       .on("click", selectState);
-      console.log("path.state: ", path)
 
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
@@ -77,7 +76,6 @@ function selectState(usState){
     stateName.innerText = `${data[0].state}`;
     headlineContainer.append(stateName);
 
-
     clearButton = document.createElement('button');
     clearButton.className = 'clearMasterButton'
     clearButton.innerText = 'Clear';
@@ -92,7 +90,6 @@ function selectState(usState){
     senatorOneTitle = document.createElement('h5');
     senatorOneTitle.innerText = `${senatorOneName}`;
 
-    console.log("Party: ", senatorOneParty)
     if (senatorOneParty == 'Democrat'){
       senatorOneTitle.style.color = '#232066';
     } if (senatorOneParty == 'Republican'){
@@ -202,7 +199,6 @@ function getDonors(){
     donorArray.push(donor.org_name)
   })
 
-
   let select = document.getElementById('donor-dropdown');
   for(let i = 0; i < donorArray.length; i++) {
     let option = document.createElement('option');
@@ -213,7 +209,6 @@ function getDonors(){
   }
   });
 }
-
 
 function createTable(){
   // donorTableContainer = document.getElementById('donor-table-container');
@@ -261,7 +256,6 @@ function handleDonorRequest(){
 
     donorTable = document.getElementById('donor-table');
      data.forEach(function(result){
-      // console.log("result is ", result);
       newRow = document.createElement('TR');
       newRow.className = 'tableRow'
       newSen = document.createElement('TD');
