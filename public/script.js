@@ -35,17 +35,15 @@ d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
   // console.log("Map Data is ", map);
 
-  let groupedElements = svg.append("g");
+  // let groupedElements = svg.append("g");
   // this is a geometry collection that holds an array of arc and line coordinates for each US state
   let stateDrawData = map.objects.states;
   // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
 
-
   svg.append("g")
     .attr("id", "states")
     .selectAll("path")
-
     // passes the state geometry dataset into the groupedElements array
     .data(topoData)
       // binds the above topoData coordinates to the groupedElements array so each coordinate can be drawn on the page.
@@ -56,10 +54,46 @@ d3.json("usa.json", function(error, map) {
       .on("click", selectState);
 
   svg.append("path")
-    .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
+    .datum(topojson.mesh(map, stateDrawData, function(a, b) {
+      return a !== b;
+    }))
     .attr("id", "state-borders")
     .attr("d", path);
+
 });
+
+
+// function clicked(stateSelected) {
+//   // default centroid values
+//   var x = null;
+//   var y = null;
+//   var k = null;
+
+//   let g = svg.append('g');
+//   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
+//   if (stateSelected && centered !== stateSelected) {
+//     var centroid = path.centroid(stateSelected);
+//     // console.log("stateSelected is ", stateSelected);
+//     console.log("centroid is ", centroid);
+//     x = centroid[0];
+//     y = centroid[1];
+//     k = 4;
+//     centered = stateSelected;
+//   } else {
+//     x = width / 2;
+//     y = height / 2;
+//     k = 1;
+//     centered = null;
+//   }
+
+//   g.selectAll("path")
+//       .classed("active", centered && function(stateSelected) { return stateSelected === centered; });
+
+//   g.transition()
+//       .duration(750)
+//       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+//       .style("stroke-width", 1.5 / k + "px");
+// }
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
@@ -68,7 +102,7 @@ function selectState(usState){
   .then((r) => r.json())
   // the response is going to an array of 20 items per state clicked (2 senators * 10 donors)
   .then((data) => {
-    console.log("donor data is ", data);
+    // console.log("donor data is ", data);
     // vanilla JS DOM manipulation to create the modal that will display the data
     containerDiv = document.createElement('div');
     containerDiv.className = "containerDiv";
