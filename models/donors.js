@@ -11,6 +11,22 @@ const config = {
 const db = pg(config);
 
 module.exports = {
+
+  getLargestDonors(req, res, next) {
+    db.many(
+      `SELECT * FROM donors
+      LEFT JOIN senators
+      ON donors.sen_id = senators.api_id
+      ORDER BY donors.dollar_total DESC
+      LIMIT 10;`
+      )
+    .then((donorData) => {
+      res.rows = donorData;
+      next();
+    })
+    .catch(error => next(error));
+  },
+
   getDonorsByState(req, res, next) {
     let stateID = Number.parseInt(req.params.stateID);
     db.any(`

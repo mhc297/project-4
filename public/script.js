@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("script.js is linked");
   getDonors();
+  getLargestDonations();
 });
 
 let heatMapped = [1, 2, 3, 4];
@@ -30,18 +31,19 @@ svg.append("rect")
     .attr("width", width)
     .attr("height", height);
 
+let groupedElements = svg.append("g");
+
 
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
   // console.log("Map Data is ", map);
 
-  // let groupedElements = svg.append("g");
   // this is a geometry collection that holds an array of arc and line coordinates for each US state
   let stateDrawData = map.objects.states;
   // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
 
-  svg.append("g")
+  groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
     // passes the state geometry dataset into the groupedElements array
@@ -53,7 +55,7 @@ d3.json("usa.json", function(error, map) {
       .attr("d", path)
       .on("click", selectState);
 
-  svg.append("path")
+  groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) {
       return a !== b;
     }))
@@ -62,41 +64,46 @@ d3.json("usa.json", function(error, map) {
 
 });
 
-
-// function clicked(stateSelected) {
-//   // default centroid values
-//   var x = null;
-//   var y = null;
-//   var k = null;
-
-//   let g = svg.append('g');
-//   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
-//   if (stateSelected && centered !== stateSelected) {
-//     var centroid = path.centroid(stateSelected);
-//     // console.log("stateSelected is ", stateSelected);
-//     console.log("centroid is ", centroid);
-//     x = centroid[0];
-//     y = centroid[1];
-//     k = 4;
-//     centered = stateSelected;
-//   } else {
-//     x = width / 2;
-//     y = height / 2;
-//     k = 1;
-//     centered = null;
-//   }
-
-//   g.selectAll("path")
-//       .classed("active", centered && function(stateSelected) { return stateSelected === centered; });
-
-//   g.transition()
-//       .duration(750)
-//       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-//       .style("stroke-width", 1.5 / k + "px");
-// }
+function getLargestDonations(){
+  fetch('db/donors/largest')
+  .then((r) => r.json());
+  .then((response) => {
+    console.log(response);
+  })
+  .catch(error => console.log(response))
+}
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
+// default centroid values
+  var x = null;
+  var y = null;
+  var stroke = null;
+
+  // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
+  if (usState && centered !== usState) {
+    var centroid = path.centroid(usState);
+    // console.log("usState is ", usState);
+    console.log("centroid is ", centroid);
+    x = centroid[0];
+    y = centroid[1];
+    stroke = 4;
+    centered = usState;
+  } else {
+    x = width / 2;
+    y = height / 2;
+    stroke = 1;
+    centered = null;
+  }
+
+  groupedElements.selectAll("path")
+      .classed("active", centered && function(usState) { return usState === centered; });
+
+  groupedElements.transition()
+      .duration(1250)
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + stroke + ")translate(" + -x + "," + -y + ")")
+      .style("stroke-width", (2 / stroke) + "px");
+
   // calls the sql database
   fetch(`/db/donors/${usState.id}`)
   .then((r) => r.json())
