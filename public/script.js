@@ -21,7 +21,8 @@ let path = d3.geo.path()
     .projection(projection);
 
 // defines the svg properties and a hook that will hang onto the main page
-let svg = d3.select("#map-container").append("svg")
+let svg = d3.select("#map-container")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr("id", "map")
@@ -34,6 +35,7 @@ svg.append("rect")
 let groupedElements = svg.append("g");
 
 
+
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
   // console.log("Map Data is ", map);
@@ -42,6 +44,7 @@ d3.json("usa.json", function(error, map) {
   let stateDrawData = map.objects.states;
   // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
+
 
   groupedElements.append("g")
     .attr("id", "states")
@@ -58,7 +61,8 @@ d3.json("usa.json", function(error, map) {
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) {
       return a !== b;
-    }))
+    })
+    )
     .attr("id", "state-borders")
     .attr("d", path);
 
@@ -71,34 +75,49 @@ function getLargestDonations(){
 
     donationContainer = document.getElementById('donation-container');
     donationContainer.innerText = '';
-    donationContainerHeadline = document.createElement('h3');
+    donationContainerHeadline = document.createElement('div');
     donationContainerHeadline.innerText = 'Largest Donations (Nationally)';
+    donationContainerHeadline.className = 'donationContainerHeadline'
     donationContainer.append(donationContainerHeadline);
 
     response.forEach(function(donation){
-      console.log(donation);
+      donationRow = document.createElement('TR');
+      if (donation.party == 'Republican') {
+        donationRow.style.color = '#E91D0E';
+      } if (donation.party == 'Democrat') {
+        donationRow.style.color = '#232066';
+      } if (donation.party == 'Independent') {
+        donationRow.style.color = '#0F7F12';
+      }
+
+      donationTitleRow = document.createElement('div');
+      donationTitleRow.className = 'donationTitleRow'
+      donationTableDonor = document.createElement('h5');
+      donationTableDonor.innerText = `${donation.org_name}`;
+      donationTitleRow.append(donationTableDonor);
 
       donationTable = document.createElement('Table');
-      donationTable.className = 'donation-table'
-
-      donationRow = document.createElement('TR')
-
-      donationTableDonor = document.createElement('TD');
-      donationTableDonor.innerText = `${donation.org_name}`;
-      donationRow.append(donationTableDonor);
+      donationTable.className = 'donation-table';
 
       donationTableSenator = document.createElement('TD');
-      donationTableSenator.innerText = `${donation.name}`;
+      donationTableSenatorItem = document.createElement('p');
+      donationTableSenatorItem.innerText = `${donation.name}`;
+      donationTableSenator.append(donationTableSenatorItem);
       donationRow.append(donationTableSenator);
 
       donationTableState = document.createElement('TD');
-      donationTableState.innerText = `${donation.state}`;
+      donationTableStateItem = document.createElement('p');
+      donationTableStateItem.innerText = `${donation.state_abr}`;
+      donationTableState.append(donationTableStateItem);
       donationRow.append(donationTableState);
 
       donationTableTotal = document.createElement('TD');
-      donationTableTotal.innerText = `$${donation.dollar_total}`
+      donationTableTotalItem = document.createElement('p');
+      donationTableTotalItem.innerText = `$${donation.dollar_total}`
+      donationTableTotal.append(donationTableTotalItem);
       donationRow.append(donationTableTotal);
 
+      donationContainer.append(donationTitleRow);
       donationTable.append(donationRow);
 
       donationContainer.append(donationTable);
@@ -110,6 +129,7 @@ function getLargestDonations(){
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
+  console.log("RUNNING")
 // default centroid values
   let x = null;
   let y = null;
