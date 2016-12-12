@@ -22,15 +22,15 @@ let path = d3.geo.path()
 
 // defines the svg properties and a hook that will hang onto the main page
 let svg = d3.select("#map-container")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("id", "map")
+  .append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .attr("id", "map")
 
 svg.append("rect")
-    .attr("class", "background")
-    .attr("width", width)
-    .attr("height", height);
+  .attr("class", "background")
+  .attr("width", width)
+  .attr("height", height);
 
 let groupedElements = svg.append("g");
 
@@ -45,6 +45,14 @@ d3.json("usa.json", function(error, map) {
   // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
 
+  let heatMapped = [1, 2, 3, 4];
+
+  // topoData.forEach(function(data) {
+  //   // console.log(data.id)
+  //   if (data.id in heatMapped)
+  //   // console.log(data.id)
+  // })
+
 
   groupedElements.append("g")
     .attr("id", "states")
@@ -57,6 +65,16 @@ d3.json("usa.json", function(error, map) {
       .append("path")
       .attr("d", path)
       .on("click", selectState);
+
+  // groupedElements.append("g")
+  //   .attr("class", "heatMapped")
+  //   .selectAll("path")
+  //   .data(topoData)
+  //   .enter()
+  //   .append("path")
+  //   .attr("d", path)
+  //   .fill()
+
 
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) {
@@ -130,7 +148,7 @@ function getLargestDonations(){
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
   console.log("RUNNING")
-// default centroid values
+  // default centroid values
   let x = null;
   let y = null;
   let stroke;
@@ -197,7 +215,7 @@ function selectState(usState){
       senatorOneTitle.style.color = '#E91D0E';
     } if (senatorOneParty == 'Independent') {
       senatorOneTitle.style.color = '#0F7F12';
-    }
+    };
 
     // grabs the senators name
     senatorTwoName = data[data.length - 1].name;
@@ -211,7 +229,7 @@ function selectState(usState){
       senatorTwoTitle.style.color = '#E91D0E';
     } if (senatorTwoParty == 'Independent') {
       senatorTwoTitle.style.color = '#0F7F12';
-    }
+    };
 
     senatorOneDiv = document.createElement('div');
     senatorOneDiv.append(senatorOneTitle);
@@ -275,21 +293,16 @@ function selectState(usState){
         eachDonationDivSenTwo.append(indivLi);
 
         senatorTwoDiv.append(eachDonationDivSenTwo)
-      }
+      };
     });
 
     containerDiv.append(senatorOneDiv);
     containerDiv.append(senatorTwoDiv);
     masterContainer.append(containerDiv);
 
-
-    function clearMasterContainer(){
-      masterContainer.innerText = '';
-    }
-
   })
   .catch(error => console.log(error))
-}
+};
 
 function getDonors(){
   let donorArray = []

@@ -1,6 +1,8 @@
 // Jason & https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all
 // require senatorIDArray from 'senatorArray.js'
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
+
+const OPENSECRETS_API = process.env.OPENSECRETS_API;
 
 // array of 100 senators to be fetched
 const senatorIDArray = [
@@ -111,7 +113,7 @@ function getDonorData(req, res, next) {
 
   // each fetch call to be run per senator (bound at bottom)
   const getOneDonor = (senator) =>
-    fetch(`http://www.opensecrets.org/api/?method=candContrib&cid=${senator}&cycle=2016&apikey=7c5ba725c7f265595be2ce33526ef3a3&output=json`)
+    fetch(`http://www.opensecrets.org/api/?method=candContrib&cid=${senator}&cycle=2016&apikey=OPENSECRETS_API&output=json`)
       .then(r => r.json())
       .then((response) => {
 

@@ -56,15 +56,6 @@ footer p {
   border-bottom: 1px solid #444444;
 }
 
-@keyframes slideIn {
-  from {
-    margin-left: -600px;
-    }
-  to {
-    margin-left: 0px;
-  }
-}
-
 #donation-container button {
   height: 25px;
   align-self: center;
@@ -84,11 +75,8 @@ svg {
   right: 0px;
 }
 
-svg .background {
-  /*fill: black;*/
-}
-
 #content-container {
+  margin-top: 15px;
   display: flex;
   flex-direction: row;
   align-items: space-around;
@@ -165,7 +153,8 @@ h3 {
 }
 
 footer {
-  /*text-align: center;*/
+  align-self: flex-start;
+  margin-left: 35px;
 }
 
 .background {
