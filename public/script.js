@@ -10,13 +10,16 @@ let width = 960;
 let height = 500;
 let centered;
 
+// defines the projection (ie scale) properties for the svg
 let projection = d3.geo.albersUsa()
     .scale(1070)
     .translate([width / 2, height / 2]);
 
+// defines the path generator, will create multiple shapes and straight lines to render the map as a svg
 let path = d3.geo.path()
     .projection(projection);
 
+// defines the svg properties and a hook that will hang onto the main page
 let svg = d3.select("#map-container").append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -35,9 +38,11 @@ d3.json("usa.json", function(error, map) {
   let groupedElements = svg.append("g");
   // this is a geometry collection that holds an array of arc and line coordinates for each US state
   let stateDrawData = map.objects.states;
+  // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
 
-  groupedElements.append("g")
+
+  svg.append("g")
     .attr("id", "states")
     .selectAll("path")
 
@@ -50,7 +55,7 @@ d3.json("usa.json", function(error, map) {
       .attr("d", path)
       .on("click", selectState);
 
-  groupedElements.append("path")
+  svg.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) { return a !== b; }))
     .attr("id", "state-borders")
     .attr("d", path);
