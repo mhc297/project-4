@@ -33,8 +33,15 @@ svg.append("rect")
   .attr("height", height);
 
 let groupedElements = svg.append("g");
+var abr;
 
+let tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .html(function(d) {
+    return d.id;
+  });
 
+svg.call(tip);
 
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
@@ -53,7 +60,6 @@ d3.json("usa.json", function(error, map) {
   //   // console.log(data.id)
   // })
 
-
   groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
@@ -64,18 +70,11 @@ d3.json("usa.json", function(error, map) {
       // appends a path (ie, draws the coordinates) from the stateDrawData dataset to the page
       .append("path")
       .attr("d", path)
-      .on("click", selectState);
+      .on("click", selectState)
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
 
-  // groupedElements.append("g")
-  //   .attr("class", "heatMapped")
-  //   .selectAll("path")
-  //   .data(topoData)
-  //   .enter()
-  //   .append("path")
-  //   .attr("d", path)
-  //   .fill()
-
-
+  // draws the state borders
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) {
       return a !== b;
@@ -86,6 +85,7 @@ d3.json("usa.json", function(error, map) {
 
 });
 
+// get the 10 largest campaign donations from the database and renders to the page on open
 function getLargestDonations(){
   fetch('db/donors/largest')
   .then((r) => r.json())
@@ -95,7 +95,7 @@ function getLargestDonations(){
     donationContainer.innerText = '';
     donationContainerHeadline = document.createElement('div');
     donationContainerHeadline.innerText = 'Largest Donations (Nationally)';
-    donationContainerHeadline.className = 'donationContainerHeadline'
+    donationContainerHeadline.className = 'donationContainerHeadline';
     donationContainer.append(donationContainerHeadline);
 
     response.forEach(function(donation){
@@ -195,6 +195,7 @@ function selectState(usState){
     stateName.innerText = `${data[0].state}`;
     headlineContainer.append(stateName);
 
+    // creates the button that will clear the donation and grabs the largest donations again (the default state)
     clearButton = document.createElement('button');
     clearButton.className = 'clearMasterButton'
     clearButton.innerText = 'Clear';
@@ -209,6 +210,7 @@ function selectState(usState){
     senatorOneTitle = document.createElement('h5');
     senatorOneTitle.innerText = `${senatorOneName}`;
 
+    // sets the senator's label font color dependent on their party
     if (senatorOneParty == 'Democrat'){
       senatorOneTitle.style.color = '#232066';
     } if (senatorOneParty == 'Republican'){
@@ -223,6 +225,7 @@ function selectState(usState){
     senatorTwoTitle = document.createElement('h5');
     senatorTwoTitle.innerText = `${senatorTwoName}`;
 
+    // sets the senator's label font color dependent on their party
     if (senatorTwoParty == 'Democrat'){
       senatorTwoTitle.style.color = '#232066';
     } if (senatorTwoParty ==='Republican'){

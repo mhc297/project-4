@@ -10,7 +10,7 @@ dbRouter.get('/donors/largest', dbDonors.getLargestDonors, (req, res, next) => {
   res.json(res.rows);
 });
 
-dbRouter.get('/donors/:stateID', dbDonors.getDonorsByState, (req, res, next) =>{
+dbRouter.get('/donors/:stateID', dbDonors.getDonorsByState, (req, res, next) => {
   res.json(res.rows);
 });
 
