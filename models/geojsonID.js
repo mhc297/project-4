@@ -1,4 +1,4 @@
-geojsonIDs [
+geojsonIDs {
   1: "AL",
   2: "AK",
   4: "AZ",
@@ -49,4 +49,4 @@ geojsonIDs [
   54: "WV",
   55: "WI",
   56: "WY"
-]
+}

@@ -30,15 +30,69 @@ let svg = d3.select("#map-container")
 svg.append("rect")
   .attr("class", "background")
   .attr("width", width)
-  .attr("height", height);
+  .attr("height", height)
+  .on("click", selectState);
 
 let groupedElements = svg.append("g");
 var abr;
 
+const geojsonIDs = {
+  1: "AL",
+  2: "AK",
+  4: "AZ",
+  5: "AR",
+  6: "CA",
+  8: "CO",
+  9: "CT",
+  10: "DE",
+  12: "FL",
+  13: "GA",
+  15: "HI",
+  16: "ID",
+  17: "IL",
+  18: "IN",
+  19: "IA",
+  20: "KS",
+  21: "KY",
+  22: "LA",
+  23: "ME",
+  24: "MD",
+  25: "MA",
+  26: "MI",
+  27: "MN",
+  28: "MS",
+  29: "MO",
+  30: "MT",
+  31: "NE",
+  32: "NV",
+  33: "NH",
+  34: "NJ",
+  35: "NM",
+  36: "NY",
+  37: "NC",
+  38: "ND",
+  39: "OH",
+  40: "OK",
+  41: "OR",
+  42: "PA",
+  44: "RI",
+  45: "SC",
+  46: "SD",
+  47: "TN",
+  48: "TX",
+  49: "UT",
+  50: "VT",
+  51: "VA",
+  53: "WA",
+  54: "WV",
+  55: "WI",
+  56: "WY"
+}
+
 let tip = d3.tip()
   .attr('class', 'd3-tip')
-  .html(function(d) {
-    return d.id;
+  .html(function(state) {
+    return geojsonIDs[state.id]
   });
 
 svg.call(tip);
@@ -147,7 +201,6 @@ function getLargestDonations(){
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function selectState(usState){
-  console.log("RUNNING")
   // default centroid values
   let x = null;
   let y = null;
@@ -156,7 +209,7 @@ function selectState(usState){
   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
   if (usState && centered !== usState) {
     let centroid = path.centroid(usState);
-    // console.log("usState is ", usState);
+    console.log("usState: ", usState);
     console.log("centroid is ", centroid);
     x = centroid[0];
     y = centroid[1];
