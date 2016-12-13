@@ -200,6 +200,7 @@ function getLargestDonations(){
 
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
+let counter = 0;
 function selectState(usState){
   // default centroid values
   let x = null;
@@ -230,134 +231,143 @@ function selectState(usState){
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + stroke + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", (2 / stroke) + "px");
 
-  // calls the sql database
-  fetch(`/db/donors/${usState.id}`)
-  .then((r) => r.json())
-  // the response is going to an array of 20 items per state clicked (2 senators * 10 donors)
-  .then((data) => {
-    // console.log("donor data is ", data);
-    // vanilla JS DOM manipulation to create the modal that will display the data
-    containerDiv = document.createElement('div');
-    containerDiv.className = "containerDiv";
-    containerDiv.innerHTML = "";
-    headlineContainer = document.createElement('div');
-    headlineContainer.className = 'headline-container';
-    masterContainer = document.getElementById('donation-container');
-    masterContainer.innerHTML = '';
-    stateName = document.createElement('h3')
-    stateName.innerText = `${data[0].state}`;
-    headlineContainer.append(stateName);
 
-    // creates the button that will clear the donation and grabs the largest donations again (the default state)
-    clearButton = document.createElement('button');
-    clearButton.className = 'clearMasterButton'
-    clearButton.innerText = 'Clear';
-    clearButton.addEventListener('click', getLargestDonations);
-    headlineContainer.append(clearButton);
 
-    masterContainer.append(headlineContainer);
+  if (usState === undefined) {
+    getLargestDonations();
+  }
+    // calls the sql database
+  else {
+    fetch(`/db/donors/${usState.id}`)
+    .then((r) => r.json())
+    // the response is going to an array of 20 items per state clicked (2 senators * 10 donors)
+    .then((data) => {
+      // console.log("donor data is ", data);
+      // vanilla JS DOM manipulation to create the modal that will display the data
+      containerDiv = document.createElement('div');
+      containerDiv.className = "containerDiv";
+      containerDiv.innerHTML = "";
+      headlineContainer = document.createElement('div');
+      headlineContainer.className = 'headline-container';
+      masterContainer = document.getElementById('donation-container');
+      masterContainer.innerHTML = '';
+      stateName = document.createElement('h3')
+      stateName.innerText = `${data[0].state}`;
+      headlineContainer.append(stateName);
 
-    // grabs the first senators name (the data is returned ordered by senator)
-    senatorOneName = data[1].name;
-    senatorOneParty = data[1].party;
-    senatorOneTitle = document.createElement('h5');
-    senatorOneTitle.innerText = `${senatorOneName}`;
+      // creates the button that will clear the donation and grabs the largest donations again (the default state)
+      // clearButton = document.createElement('button');
+      // clearButton.className = 'clearMasterButton'
+      // clearButton.innerText = 'Clear';
+      // clearButton.addEventListener('click', getLargestDonations);
+      // headlineContainer.append(clearButton);
 
-    // sets the senator's label font color dependent on their party
-    if (senatorOneParty == 'Democrat'){
-      senatorOneTitle.style.color = '#232066';
-    } if (senatorOneParty == 'Republican'){
-      senatorOneTitle.style.color = '#E91D0E';
-    } if (senatorOneParty == 'Independent') {
-      senatorOneTitle.style.color = '#0F7F12';
-    };
+      masterContainer.append(headlineContainer);
 
-    // grabs the senators name
-    senatorTwoName = data[data.length - 1].name;
-    senatorTwoParty = data[data.length - 1].party;
-    senatorTwoTitle = document.createElement('h5');
-    senatorTwoTitle.innerText = `${senatorTwoName}`;
+      // grabs the first senators name (the data is returned ordered by senator)
+      senatorOneName = data[1].name;
+      senatorOneParty = data[1].party;
+      senatorOneTitle = document.createElement('h5');
+      senatorOneTitle.innerText = `${senatorOneName}`;
 
-    // sets the senator's label font color dependent on their party
-    if (senatorTwoParty == 'Democrat'){
-      senatorTwoTitle.style.color = '#232066';
-    } if (senatorTwoParty ==='Republican'){
-      senatorTwoTitle.style.color = '#E91D0E';
-    } if (senatorTwoParty == 'Independent') {
-      senatorTwoTitle.style.color = '#0F7F12';
-    };
-
-    senatorOneDiv = document.createElement('div');
-    senatorOneDiv.append(senatorOneTitle);
-    senatorOneDiv = document.createElement('div');
-    senatorOneDiv.append(senatorOneTitle);
-    senatorOneDiv.className = "senatorDiv";
-
-    senatorTwoDiv = document.createElement('div');
-    senatorTwoDiv.append(senatorTwoTitle);
-    senatorTwoDiv = document.createElement('div');
-    senatorTwoDiv.append(senatorTwoTitle);
-    senatorTwoDiv.className = "senatorDiv";
-
-    // this forEach loops through the donations and groups the donation with its appropriate senator
-    data.forEach(function(donation){
-
-      if (donation.name == senatorOneName) {
-
-        eachDonationDivSenOne = document.createElement('div');
-        eachDonationDivSenOne.className = "donationDiv";
-
-        organizationLi = document.createElement('p');
-        organizationLi.innerText = `${donation.org_name}`;
-        organizationLi.style.fontWeight = 'bold';
-        eachDonationDivSenOne.append(organizationLi);
-
-        amountLi = document.createElement('p');
-        amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
-        eachDonationDivSenOne.append(amountLi);
-
-        pacLi = document.createElement('p');
-        pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
-        eachDonationDivSenOne.append(pacLi);
-
-        indivLi = document.createElement('p');
-        indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
-        eachDonationDivSenOne.append(indivLi);
-
-        senatorOneDiv.append(eachDonationDivSenOne);
-
-      } else {
-
-        eachDonationDivSenTwo = document.createElement('div');
-        eachDonationDivSenTwo.className = "donationDiv";
-
-        organizationLi = document.createElement('p');
-        organizationLi.innerText = `${donation.org_name}`;
-        organizationLi.style.fontWeight = 'bold';
-        eachDonationDivSenTwo.append(organizationLi);
-
-        amountLi = document.createElement('p');
-        amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
-        eachDonationDivSenTwo.append(amountLi);
-
-        pacLi = document.createElement('p');
-        pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
-        eachDonationDivSenTwo.append(pacLi);
-
-        indivLi = document.createElement('p');
-        indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
-        eachDonationDivSenTwo.append(indivLi);
-
-        senatorTwoDiv.append(eachDonationDivSenTwo)
+      // sets the senator's label font color dependent on their party
+      if (senatorOneParty == 'Democrat'){
+        senatorOneTitle.style.color = '#232066';
+      } if (senatorOneParty == 'Republican'){
+        senatorOneTitle.style.color = '#E91D0E';
+      } if (senatorOneParty == 'Independent') {
+        senatorOneTitle.style.color = '#0F7F12';
       };
-    });
 
-    containerDiv.append(senatorOneDiv);
-    containerDiv.append(senatorTwoDiv);
-    masterContainer.append(containerDiv);
+      // grabs the senators name
+      senatorTwoName = data[data.length - 1].name;
+      senatorTwoParty = data[data.length - 1].party;
+      senatorTwoTitle = document.createElement('h5');
+      senatorTwoTitle.innerText = `${senatorTwoName}`;
 
-  })
-  .catch(error => console.log(error))
+      // sets the senator's label font color dependent on their party
+      if (senatorTwoParty == 'Democrat'){
+        senatorTwoTitle.style.color = '#232066';
+      } if (senatorTwoParty ==='Republican'){
+        senatorTwoTitle.style.color = '#E91D0E';
+      } if (senatorTwoParty == 'Independent') {
+        senatorTwoTitle.style.color = '#0F7F12';
+      };
+
+      senatorOneDiv = document.createElement('div');
+      senatorOneDiv.append(senatorOneTitle);
+      senatorOneDiv = document.createElement('div');
+      senatorOneDiv.append(senatorOneTitle);
+      senatorOneDiv.className = "senatorDiv";
+
+      senatorTwoDiv = document.createElement('div');
+      senatorTwoDiv.append(senatorTwoTitle);
+      senatorTwoDiv = document.createElement('div');
+      senatorTwoDiv.append(senatorTwoTitle);
+      senatorTwoDiv.className = "senatorDiv";
+
+      // this forEach loops through the donations and groups the donation with its appropriate senator
+      data.forEach(function(donation){
+
+        if (donation.name == senatorOneName) {
+
+          eachDonationDivSenOne = document.createElement('div');
+          eachDonationDivSenOne.className = "donationDiv";
+
+          organizationLi = document.createElement('p');
+          organizationLi.innerText = `${donation.org_name}`;
+          organizationLi.style.fontWeight = 'bold';
+          eachDonationDivSenOne.append(organizationLi);
+
+          amountLi = document.createElement('p');
+          amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+          eachDonationDivSenOne.append(amountLi);
+
+          pacLi = document.createElement('p');
+          pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
+          eachDonationDivSenOne.append(pacLi);
+
+          indivLi = document.createElement('p');
+          indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
+          eachDonationDivSenOne.append(indivLi);
+
+          senatorOneDiv.append(eachDonationDivSenOne);
+
+        } else {
+
+          eachDonationDivSenTwo = document.createElement('div');
+          eachDonationDivSenTwo.className = "donationDiv";
+
+          organizationLi = document.createElement('p');
+          organizationLi.innerText = `${donation.org_name}`;
+          organizationLi.style.fontWeight = 'bold';
+          eachDonationDivSenTwo.append(organizationLi);
+
+          amountLi = document.createElement('p');
+          amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+          eachDonationDivSenTwo.append(amountLi);
+
+          pacLi = document.createElement('p');
+          pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
+          eachDonationDivSenTwo.append(pacLi);
+
+          indivLi = document.createElement('p');
+          indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
+          eachDonationDivSenTwo.append(indivLi);
+
+          senatorTwoDiv.append(eachDonationDivSenTwo)
+        };
+      });
+
+      containerDiv.append(senatorOneDiv);
+      containerDiv.append(senatorTwoDiv);
+      masterContainer.append(containerDiv);
+
+      counter++;
+      console.log("counter: ", counter);
+    })
+    .catch(error => console.log("ERROR", error))
+  }
 };
 
 function getDonors(){
