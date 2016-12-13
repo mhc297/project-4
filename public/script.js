@@ -255,13 +255,6 @@ function selectState(usState){
       stateName.innerText = `${data[0].state}`;
       headlineContainer.append(stateName);
 
-      // creates the button that will clear the donation and grabs the largest donations again (the default state)
-      // clearButton = document.createElement('button');
-      // clearButton.className = 'clearMasterButton'
-      // clearButton.innerText = 'Clear';
-      // clearButton.addEventListener('click', getLargestDonations);
-      // headlineContainer.append(clearButton);
-
       masterContainer.append(headlineContainer);
 
       // grabs the first senators name (the data is returned ordered by senator)
