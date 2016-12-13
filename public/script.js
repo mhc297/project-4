@@ -1,12 +1,18 @@
 document.addEventListener("DOMContentLoaded", function(event) {
   console.log("script.js is linked");
-  getDonors();
-  getLargestDonations();
+  populateDonorDropdown();
+  getLargestDonors();
 });
+
+function convertString(string){
+  let integer =  parseInt(string);
+  return integer.toLocaleString()
+};
 
 let heatMapped = [1, 2, 3, 4];
 heatMapped.className = 'heatMapped';
 
+// map build was adapted from: http://bl.ocks.org/mbostock/10024231 & https://bost.ocks.org/mike/map/
 let width = 960;
 let height = 500;
 let centered;
@@ -31,11 +37,11 @@ svg.append("rect")
   .attr("class", "background")
   .attr("width", width)
   .attr("height", height)
-  .on("click", selectState);
+  .on("click", searchByState);
 
 let groupedElements = svg.append("g");
-var abr;
 
+// list of the states by their geoJSON id, will be called into the d3 tip below.
 const geojsonIDs = {
   1: "AL",
   2: "AK",
@@ -87,8 +93,9 @@ const geojsonIDs = {
   54: "WV",
   55: "WI",
   56: "WY"
-}
+};
 
+// calls d3 Tooltip, a technology that builds labels (shows the states abr on the page)
 let tip = d3.tip()
   .attr('class', 'd3-tip')
   .html(function(state) {
@@ -124,7 +131,7 @@ d3.json("usa.json", function(error, map) {
       // appends a path (ie, draws the coordinates) from the stateDrawData dataset to the page
       .append("path")
       .attr("d", path)
-      .on("click", selectState)
+      .on("click", searchByState)
       .on('mouseover', tip.show)
       .on('mouseout', tip.hide);
 
@@ -136,11 +143,10 @@ d3.json("usa.json", function(error, map) {
     )
     .attr("id", "state-borders")
     .attr("d", path);
-
 });
 
 // get the 10 largest campaign donations from the database and renders to the page on open
-function getLargestDonations(){
+function getLargestDonors(){
   fetch('db/donors/largest')
   .then((r) => r.json())
   .then((response) => {
@@ -185,7 +191,7 @@ function getLargestDonations(){
 
       donationTableTotal = document.createElement('TD');
       donationTableTotalItem = document.createElement('p');
-      donationTableTotalItem.innerText = `$${donation.dollar_total}`
+      donationTableTotalItem.innerText = `$${convertString(donation.dollar_total)}`
       donationTableTotal.append(donationTableTotalItem);
       donationRow.append(donationTableTotal);
 
@@ -198,20 +204,39 @@ function getLargestDonations(){
   .catch(error => console.log(error))
 };
 
+// hits the sql database and populates the donor drop-down menu
+function populateDonorDropdown(){
+  let donorArray = []
+  fetch('/db/donors/donorList')
+  .then((r) => r.json())
+  .then((donorList) => {
+    donorList.forEach(function(donor){
+    donorArray.push(donor.org_name)
+  })
+
+  let select = document.getElementById('donor-dropdown');
+  for(let i = 0; i < donorArray.length; i++) {
+    let option = document.createElement('option');
+    option.innerHTML = donorArray[i];
+    option.value = donorArray[i];
+    select.appendChild(option);
+
+  }
+  });
+};
 
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
-let counter = 0;
-function selectState(usState){
+function searchByState(usState){
+  let stateToShowNow = usState;
   // default centroid values
   let x = null;
   let y = null;
   let stroke;
 
+  // adapted from: http://bl.ocks.org/mbostock/2206590
   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
   if (usState && centered !== usState) {
     let centroid = path.centroid(usState);
-    console.log("usState: ", usState);
-    console.log("centroid is ", centroid);
     x = centroid[0];
     y = centroid[1];
     stroke = 4;
@@ -231,10 +256,8 @@ function selectState(usState){
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + stroke + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", (2 / stroke) + "px");
 
-
-
   if (usState === undefined) {
-    getLargestDonations();
+    getLargestDonors();
   }
     // calls the sql database
   else {
@@ -313,15 +336,15 @@ function selectState(usState){
           eachDonationDivSenOne.append(organizationLi);
 
           amountLi = document.createElement('p');
-          amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+          amountLi.innerText = `Donation Amount: $${convertString(donation.dollar_total)}`;
           eachDonationDivSenOne.append(amountLi);
 
           pacLi = document.createElement('p');
-          pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
+          pacLi.innerText = `Donations From PACs: $${convertString(donation.dollar_pac)}`;
           eachDonationDivSenOne.append(pacLi);
 
           indivLi = document.createElement('p');
-          indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
+          indivLi.innerText = `Donations From Individuals: $${convertString(donation.dollar_individual)}`;
           eachDonationDivSenOne.append(indivLi);
 
           senatorOneDiv.append(eachDonationDivSenOne);
@@ -337,15 +360,15 @@ function selectState(usState){
           eachDonationDivSenTwo.append(organizationLi);
 
           amountLi = document.createElement('p');
-          amountLi.innerText = `Donation Amount: $${donation.dollar_total}`;
+          amountLi.innerText = `Donation Amount: $${convertString(donation.dollar_total)}`;
           eachDonationDivSenTwo.append(amountLi);
 
           pacLi = document.createElement('p');
-          pacLi.innerText = `Donations From PACs: $${donation.dollar_pac}`;
+          pacLi.innerText = `Donations From PACs: $${convertString(donation.dollar_pac)}`;
           eachDonationDivSenTwo.append(pacLi);
 
           indivLi = document.createElement('p');
-          indivLi.innerText = `Donations From Individuals: $${donation.dollar_individual}`;
+          indivLi.innerText = `Donations From Individuals: $${convertString(donation.dollar_individual)}`;
           eachDonationDivSenTwo.append(indivLi);
 
           senatorTwoDiv.append(eachDonationDivSenTwo)
@@ -356,36 +379,13 @@ function selectState(usState){
       containerDiv.append(senatorTwoDiv);
       masterContainer.append(containerDiv);
 
-      counter++;
-      console.log("counter: ", counter);
     })
     .catch(error => console.log("ERROR", error))
   }
 };
 
-function getDonors(){
-  let donorArray = []
-  fetch('/db/donors/donorList')
-  .then((r) => r.json())
-  .then((donorList) => {
-    donorList.forEach(function(donor){
-    donorArray.push(donor.org_name)
-  })
-
-  let select = document.getElementById('donor-dropdown');
-  for(let i = 0; i < donorArray.length; i++) {
-    let option = document.createElement('option');
-    option.innerHTML = donorArray[i];
-    option.value = donorArray[i];
-    select.appendChild(option);
-
-  }
-  });
-}
-
+// creates the modal table for donations sorted by donor
 function createTable(){
-  // donorTableContainer = document.getElementById('donor-table-container');
-  // donorTableContainer.style.display = 'block';
   donorTable = document.getElementById('donor-table');
 
   tableHeadSen = document.createElement('TH');
@@ -399,9 +399,10 @@ function createTable(){
   tableHeadTotal = document.createElement('TH');
   tableHeadTotal.innerText = 'Donation'
   tableHeadTotal.append(donorTable);
-}
+};
 
-function handleDonorRequest(){
+// creates the modal which displays BY DONOR
+function searchByDonor(){
   let drop = document.getElementById('donor-dropdown');
   let dropValue = drop.options[drop.selectedIndex].value
   fetch(`/db/donors/byDonor/${dropValue}`)
@@ -440,7 +441,7 @@ function handleDonorRequest(){
       newRow.append(newState);
 
       newTotal = document.createElement('TD');
-      newTotal.innerText = `$${result.dollar_total}`
+      newTotal.innerText = `$${convertString(result.dollar_total)}`
 
       newRow.append(newTotal);
       if (result.party == 'Republican') {
@@ -469,9 +470,9 @@ function handleDonorRequest(){
       console.log("heatMapped array is now ", heatMapped);
   })
   .catch(error => console.log(error));
-}
+};
 
-let dropButton = document.getElementById('drop-button')
-dropButton.addEventListener("click", handleDonorRequest)
+let dropButton = document.getElementById('drop-button');
+dropButton.addEventListener("click", searchByDonor);
 
 
