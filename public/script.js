@@ -4,11 +4,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
   getLargestDonors();
 });
 
-
-
-let heatMapped = [1, 2, 3, 4];
-heatMapped.className = 'heatMapped';
-
 // map build was adapted from: http://bl.ocks.org/mbostock/10024231 & https://bost.ocks.org/mike/map/
 let width = 960;
 let height = 500;
@@ -112,14 +107,6 @@ d3.json("usa.json", function(error, map) {
   // groups the feature collections (ie state names) and geographic details to be passed to the path generator
   let topoData = topojson.feature(map, stateDrawData).features;
 
-  let heatMapped = [1, 2, 3, 4];
-
-  // topoData.forEach(function(data) {
-  //   // console.log(data.id)
-  //   if (data.id in heatMapped)
-  //   // console.log(data.id)
-  // })
-
   groupedElements.append("g")
     .attr("id", "states")
     .selectAll("path")
@@ -147,7 +134,7 @@ d3.json("usa.json", function(error, map) {
 // takes the dollar amounts stored as strings to dollar values
 function convertString(string){
   let integer =  parseInt(string);
-  return integer.toLocaleString()
+  return integer.toLocaleString();
 };
 
 // get the 10 largest campaign donations from the database and renders to the page on open
@@ -202,7 +189,7 @@ function getLargestDonors(){
 
       donationContainer.append(donationTitleRow);
       donationTable.append(donationRow);
-      // donationContainerContainer.append(donationTable);
+
       donationContainer.append(donationTable);
     })
   })
@@ -225,8 +212,7 @@ function populateDonorDropdown(){
     option.innerHTML = donorArray[i];
     option.value = donorArray[i];
     select.appendChild(option);
-
-  }
+    }
   });
 };
 
@@ -422,7 +408,6 @@ function searchByDonor(){
   .then((r) => r.json())
   .then((data) => {
 
-    heatMapped = [];
     donorTable = document.getElementById('donor-table');
     modal = document.getElementById('donor-modal');
     modalTitle = document.getElementById('modal-title');
@@ -476,11 +461,8 @@ function searchByDonor(){
         modal.style.display = 'none';
       });
 
-      let heatMapItem = result.geojson_id
-      heatMapped.push(heatMapItem)
     })
 
-      console.log("heatMapped array is now ", heatMapped);
   })
   .catch(error => console.log(error));
 };
