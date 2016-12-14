@@ -6,7 +6,8 @@ const apiRouter = require('./routes/api');
 const dbRouter = require('./routes/db');
 
 const app = express();
-const port = process.env.PORT || 3000;
+
+const PORT = process.argv[2] || process.env.PORT || 3000;
 
 app.use(express.static('public'));
 
@@ -17,4 +18,4 @@ app.get('/', function(req, res){
 app.use('/api', apiRouter);
 app.use('/db', dbRouter);
 
-app.listen(port, console.log("Server listening on ", port));
+app.listen(PORT, console.log("Server listening on ", PORT));

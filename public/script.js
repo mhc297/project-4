@@ -4,10 +4,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   getLargestDonors();
 });
 
-function convertString(string){
-  let integer =  parseInt(string);
-  return integer.toLocaleString()
-};
+
 
 let heatMapped = [1, 2, 3, 4];
 heatMapped.className = 'heatMapped';
@@ -102,8 +99,10 @@ let tip = d3.tip()
     return geojsonIDs[state.id]
   });
 
+// appends the tooltip to the d3 svg
 svg.call(tip);
 
+// imports in the usa.json file which contains the map data that will be drawn onto the page by the path generator
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
   // console.log("Map Data is ", map);
@@ -144,6 +143,12 @@ d3.json("usa.json", function(error, map) {
     .attr("id", "state-borders")
     .attr("d", path);
 });
+
+// takes the dollar amounts stored as strings to dollar values
+function convertString(string){
+  let integer =  parseInt(string);
+  return integer.toLocaleString()
+};
 
 // get the 10 largest campaign donations from the database and renders to the page on open
 function getLargestDonors(){
@@ -228,7 +233,7 @@ function populateDonorDropdown(){
 // this function renders the donor data when a given state is clicked. The states id is passed as the event of the click
 function searchByState(usState){
   let stateToShowNow = usState;
-  // default centroid values
+  // default centroid values, will be assigned values when the user clicks on a state
   let x = null;
   let y = null;
   let stroke;
@@ -248,6 +253,7 @@ function searchByState(usState){
     centered = null;
   }
 
+  // adds a class of active to all the states (the grouped objects)
   groupedElements.selectAll("path")
       .classed("active", centered && function(usState) { return usState === centered; });
 
@@ -256,16 +262,20 @@ function searchByState(usState){
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + stroke + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", (2 / stroke) + "px");
 
+      // when the user clicks an area within the svg that is not a US state (ie, an ocean or outside the map),
+      // usState will be undefined, so that resets the map an shows the largest donations by default
   if (usState === undefined) {
     getLargestDonors();
   }
-    // calls the sql database
+    // if the user clicks on a US state, its geoJSON id is grabbed and run into the sql database
+    // to return all campaign donations related to that state
   else {
     fetch(`/db/donors/${usState.id}`)
     .then((r) => r.json())
-    // the response is going to an array of 20 items per state clicked (2 senators * 10 donors)
+
+    // the response is going to an array of 20 items per state clicked (2 senators times 10 donors each)
     .then((data) => {
-      // console.log("donor data is ", data);
+
       // vanilla JS DOM manipulation to create the modal that will display the data
       containerDiv = document.createElement('div');
       containerDiv.className = "containerDiv";
@@ -310,12 +320,14 @@ function searchByState(usState){
         senatorTwoTitle.style.color = '#0F7F12';
       };
 
+      // more vanilla JS to create holder divs for styling
       senatorOneDiv = document.createElement('div');
       senatorOneDiv.append(senatorOneTitle);
       senatorOneDiv = document.createElement('div');
       senatorOneDiv.append(senatorOneTitle);
       senatorOneDiv.className = "senatorDiv";
 
+      // same as above but for the second senator
       senatorTwoDiv = document.createElement('div');
       senatorTwoDiv.append(senatorTwoTitle);
       senatorTwoDiv = document.createElement('div');
@@ -325,6 +337,7 @@ function searchByState(usState){
       // this forEach loops through the donations and groups the donation with its appropriate senator
       data.forEach(function(donation){
 
+        //
         if (donation.name == senatorOneName) {
 
           eachDonationDivSenOne = document.createElement('div');
