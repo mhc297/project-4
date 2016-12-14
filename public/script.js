@@ -23,7 +23,7 @@ let svg = d3.select("#map-container")
   .append("svg")
   .attr("width", width)
   .attr("height", height)
-  .attr("id", "map")
+  .attr("id", "map");
 
 svg.append("rect")
   .attr("class", "background")
@@ -100,7 +100,6 @@ svg.call(tip);
 // imports in the usa.json file which contains the map data that will be drawn onto the page by the path generator
 d3.json("usa.json", function(error, map) {
   if ((error) => console.log(error));
-  // console.log("Map Data is ", map);
 
   // this is a geometry collection that holds an array of arc and line coordinates for each US state
   let stateDrawData = map.objects.states;
@@ -125,8 +124,7 @@ d3.json("usa.json", function(error, map) {
   groupedElements.append("path")
     .datum(topojson.mesh(map, stateDrawData, function(a, b) {
       return a !== b;
-    })
-    )
+    }))
     .attr("id", "state-borders")
     .attr("d", path);
 });
@@ -204,7 +202,7 @@ function populateDonorDropdown(){
   .then((donorList) => {
     donorList.forEach(function(donor){
     donorArray.push(donor.org_name)
-  })
+  });
 
   let select = document.getElementById('donor-dropdown');
   for(let i = 0; i < donorArray.length; i++) {
@@ -237,7 +235,7 @@ function searchByState(usState){
     y = height / 2;
     stroke = 1;
     centered = null;
-  }
+  };
 
   // adds a class of active to all the states (the grouped objects)
   groupedElements.selectAll("path")
@@ -323,7 +321,6 @@ function searchByState(usState){
       // this forEach loops through the donations and groups the donation with its appropriate senator
       data.forEach(function(donation){
 
-        //
         if (donation.name == senatorOneName) {
 
           eachDonationDivSenOne = document.createElement('div');
@@ -380,7 +377,7 @@ function searchByState(usState){
 
     })
     .catch(error => console.log("ERROR", error))
-  }
+  };
 };
 
 // creates the modal table for donations sorted by donor
@@ -461,7 +458,7 @@ function searchByDonor(){
         modal.style.display = 'none';
       });
 
-    })
+    });
 
   })
   .catch(error => console.log(error));
