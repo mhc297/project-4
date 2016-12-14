@@ -9,7 +9,7 @@ View by senate seat by top donor
 View as a heat map by industry
 
 Wireframe:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](resources/final_wireframe.png "Wireframe")
 
 
 Technologies Used:
