@@ -453,8 +453,6 @@ function searchByDonor(){
         newRow.style.backgroundColor = '#0F7F12';
       };
 
-      // newRow.style.backgroundColor = 'black';
-
       donorTable.append(newRow);
 
       modal.style.display = 'block';
