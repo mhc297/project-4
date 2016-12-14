@@ -147,7 +147,7 @@ function getLargestDonors(){
     donationContainer = document.getElementById('donation-container');
     donationContainer.innerText = '';
     donationContainerHeadline = document.createElement('div');
-    donationContainerHeadline.innerText = 'Largest Donations (Nationally)';
+    donationContainerHeadline.innerText = 'Largest Donations to a Candidate (Nationally):';
     donationContainerHeadline.className = 'donationContainerHeadline';
     donationContainer.append(donationContainerHeadline);
 
