@@ -13,15 +13,13 @@ Wireframe:
 
 
 Technologies Used:
-HTML
-CSS
-JavaScript
-Express
-Node.js
-PSQL
-D3 JavaScript
-jQuery
-Materialize CSS(?)
+..* HTML
+..* CSS
+..* JavaScript
+..* Express
+..* Node.js
+..* PSQL
+..* D3 JavaScript
 
 User Story:
 As a user, I wish to better understand how campaign financing varies from state-to-state, and which major corporate and individual donors favor which candidates.
