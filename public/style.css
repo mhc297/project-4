@@ -52,7 +52,7 @@ p {
   width: 100%;
   height: 40px;
   text-align: center;
-  border-bottom: 1px solid #444444;
+  /*border-bottom: 1px solid #444444;*/
 }
 
 .donationTitleRow {
@@ -123,8 +123,8 @@ svg {
 #donor-table th, td {
   width: 200px;
   text-align: center;
-  border-top: 1px solid #444444;
-  border-bottom: 1px solid #444444;
+  /*border-top: 1px solid #444444;*/
+  /*border-bottom: 1px solid #444444;*/
 }
 
 .containerDiv{
@@ -163,8 +163,8 @@ h3 {
   /*border-bottom: 1px solid black;*/
 }
 
-.donation-table td {
-  /*border-bottom: 1px solid black;*/
+.donationTitleRow{
+  border-top: 1px solid black;
 }
 
 .donationDiv {
