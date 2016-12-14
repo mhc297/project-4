@@ -93,14 +93,14 @@ const geojsonIDs = {
 };
 
 // calls d3 Tooltip, a technology that builds labels (shows the states abr on the page)
-// let tip = d3.tip()
-//   .attr('class', 'd3-tip')
-//   .html(function(state) {
-//     return geojsonIDs[state.id]
-//   });
+let tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .html(function(state) {
+    return geojsonIDs[state.id]
+  });
 
-// // appends the tooltip to the d3 svg
-// svg.call(tip);
+// appends the tooltip to the d3 svg
+svg.call(tip);
 
 // imports in the usa.json file which contains the map data that will be drawn onto the page by the path generator
 d3.json("usa.json", function(error, map) {
@@ -131,8 +131,8 @@ d3.json("usa.json", function(error, map) {
       .append("path")
       .attr("d", path)
       .on("click", searchByState)
-      // .on('mouseover', tip.show)
-      // .on('mouseout', tip.hide);
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
 
   // draws the state borders
   groupedElements.append("path")
