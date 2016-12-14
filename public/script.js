@@ -5,11 +5,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 // map build was adapted from: http://bl.ocks.org/mbostock/10024231 & https://bost.ocks.org/mike/map/
+// defines the height and width for the svg, needs to be stored in a variable as will be altered when performing zoom functionality
 let width = 960;
 let height = 500;
 let centered;
 
-// defines the projection (ie scale) properties for the svg
+// defines the geo projection (ie scale) properties for the svg, albersUsa is a composite projection of the US
 let projection = d3.geo.albersUsa()
     .scale(1070)
     .translate([width / 2, height / 2]);
@@ -25,6 +26,7 @@ let svg = d3.select("#map-container")
   .attr("height", height)
   .attr("id", "map");
 
+// creates the map background that the US map will be set upon
 svg.append("rect")
   .attr("class", "background")
   .attr("width", width)
@@ -33,7 +35,8 @@ svg.append("rect")
 
 let groupedElements = svg.append("g");
 
-// list of the states by their geoJSON id, will be called into the d3 tip below.
+// list of the states by their geoJSON id, will be passed into the d3 tooltip functionality below to display a state's abbreviation
+// on mousover
 const geojsonIDs = {
   1: "AL",
   2: "AK",
@@ -222,7 +225,7 @@ function searchByState(usState){
   let y = null;
   let stroke;
 
-  // adapted from: http://bl.ocks.org/mbostock/2206590
+  // zoom is credited to: http://bl.ocks.org/mbostock/2206590
   // if the map is NOT centered on the state selected (ie, the default state), this conditional centers the map on a given state
   if (usState && centered !== usState) {
     let centroid = path.centroid(usState);
@@ -239,7 +242,9 @@ function searchByState(usState){
 
   // adds a class of active to all the states (the grouped objects)
   groupedElements.selectAll("path")
-      .classed("active", centered && function(usState) { return usState === centered; });
+      .classed("active", centered && function(usState) {
+        return usState === centered;
+      });
 
   groupedElements.transition()
       .duration(1250)
@@ -321,6 +326,7 @@ function searchByState(usState){
       // this forEach loops through the donations and groups the donation with its appropriate senator
       data.forEach(function(donation){
 
+        // conditional that matches a donation with its senator
         if (donation.name == senatorOneName) {
 
           eachDonationDivSenOne = document.createElement('div');
@@ -464,6 +470,7 @@ function searchByDonor(){
   .catch(error => console.log(error));
 };
 
+// event listener on the donor dropdown that runs the search by donor and builds the modal table
 let dropButton = document.getElementById('drop-button');
 dropButton.addEventListener("click", searchByDonor);
 
