@@ -47,8 +47,12 @@ As a user, I wish to better understand how campaign financing varies from state-
 * API call constraints meant I needed to save donor data to an SQL database, left me having to focus on senators instead of all of Congress.
 
 #### Attributions:
+* All donation data courtesy of [The Center for Responsive Politics' OpenSecrets.org API](https://www.opensecrets.org/resources/create/apis.php)
 * All of Mike Bostock's D3 master [mapping tutorial](https://bost.ocks.org/mike/map/) and [resources](http://bl.ocks.org/mbostock)
 * In Particular: [Swiss Cantons & Lakes](http://bl.ocks.org/mbostock/10024231) 
     and [Zoom-Transfer](http://bl.ocks.org/mbostock/2206590)
 * [D3 Tooltip Tutorials](https://github.com/Caged/d3-tip)
+* [Jason Seminara](https://git.generalassemb.ly/jasonseminara?tab=overview&from=2016-11-01&to=2016-11-30&utf8=%E2%9C%93) for help with seeding donations from the API
+
+
 
