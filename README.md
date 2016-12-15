@@ -51,5 +51,3 @@ As a user, I wish to better understand how campaign financing varies from state-
 * In Particular: [Swiss Cantons & Lakes](http://bl.ocks.org/mbostock/10024231) 
     and [Zoom-Transfer](http://bl.ocks.org/mbostock/2206590)
 
-http://bl.ocks.org/mbostock/10024231
-
