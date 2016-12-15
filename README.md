@@ -1,4 +1,6 @@
-## Understand who the top donors are behind your state’s representatives in Washington DC.
+## Senate Donor D3 Visualization
+
+### Understand who the top donors are behind your state’s representatives in Washington DC.
 
 [Click Here to view on Heroku](https://senate-d3-vizualization.herokuapp.com/)
 
