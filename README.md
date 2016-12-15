@@ -50,4 +50,5 @@ As a user, I wish to better understand how campaign financing varies from state-
 * All of Mike Bostock's D3 master [mapping tutorial](https://bost.ocks.org/mike/map/) and [resources](http://bl.ocks.org/mbostock)
 * In Particular: [Swiss Cantons & Lakes](http://bl.ocks.org/mbostock/10024231) 
     and [Zoom-Transfer](http://bl.ocks.org/mbostock/2206590)
+* [D3 Tooltip Tutorials](https://github.com/Caged/d3-tip)
 
